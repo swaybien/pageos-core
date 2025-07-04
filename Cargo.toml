@@ -1,6 +1,6 @@
 [package]
 name = "pageos-core"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["PJ568 <pj568@pj568.eu.org>"]
 edition = "2024"
 description = "Core framework for building browser-centric Linux distributions"
