@@ -4,8 +4,55 @@
 
 mod server;
 
+use clap::Parser;
+use tokio::process::Command;
+use tracing::{error, info};
+
+/// 命令行参数
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    /// 服务监听端口
+    #[arg(short, long, default_value_t = 12800)]
+    prot: u16,
+
+    /// 启动子进程命令
+    #[arg(short, long)]
+    command: Option<String>,
+}
+
 #[tokio::main]
 async fn main() {
-    // 启动网页服务器，端口12800
-    server::start_server(12800).await;
+    // 初始化日志
+    tracing_subscriber::fmt::init();
+
+    let args = Args::parse();
+    info!("启动参数: {:?}", args);
+
+    // 启动子进程（如果存在）
+    let child = if let Some(cmd) = &args.command {
+        info!("启动子进程: {}", cmd);
+        Some(
+            Command::new("sh")
+                .arg("-c")
+                .arg(cmd)
+                .kill_on_drop(true)
+                .spawn()
+                .expect("启动子进程失败"),
+        )
+    } else {
+        None
+    };
+
+    // 启动服务器
+    info!("启动服务器，监听端口: {}", args.prot);
+    server::start_server(args.prot).await;
+
+    // 等待子进程退出（如果存在）
+    if let Some(mut child) = child {
+        match child.wait().await {
+            Ok(status) => info!("子进程已退出，状态码: {}", status),
+            Err(e) => error!("等待子进程时出错: {}", e),
+        }
+    }
 }

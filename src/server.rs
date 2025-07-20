@@ -3,6 +3,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use std::path::PathBuf;
+use tracing::{error, info};
 use warp::Filter;
 
 /// 启动网页服务器
@@ -14,8 +15,8 @@ pub async fn start_server(port: u16) {
     let home_dir = match home::home_dir() {
         Some(path) => path,
         None => {
-            eprintln!("无法获取用户主目录");
-            return;
+            error!("无法获取用户主目录");
+            panic!("无法获取用户主目录");
         }
     };
 
@@ -30,8 +31,10 @@ pub async fn start_server(port: u16) {
     // 设置服务器地址
     let addr = ([127, 0, 0, 1], port);
 
-    let (a, b, c, d) = (addr.0[0], addr.0[1], addr.0[2], addr.0[3]);
-    println!("启动服务器: http://{}.{}.{}.{}:{}", a, b, c, d, addr.1);
+    info!(
+        "启动服务器: http://{}.{}.{}.{}:{}",
+        addr.0[0], addr.0[1], addr.0[2], addr.0[3], addr.1
+    );
 
     // 启动服务器
     warp::serve(static_files).run(addr).await;

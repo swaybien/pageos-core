@@ -7,13 +7,8 @@
 我们这一次只做以下的事：
 
 1. **一次性直接读取以下文件：**
-   `docs/draft.md`；
-2. 和我讨论如何实现网页服务器和内嵌的 Web 页面，目前我的一些想法：
-
-   - 网页服务器只是在将 `$HOME/.local/share/pageos/` 下的文件（如 index.html ）读取并显示。
-
-3. 在 `src/server.rs` 实现网页服务器。
-4. 在 `src/main.rs` 实现调用。
+   `docs/draft.md`、`参考/pageos-greet/src/main.rs`；
+2. 在 `src/main.rs` 实现 `--prot` 和 `--command`。
 
 ## 界面
 
