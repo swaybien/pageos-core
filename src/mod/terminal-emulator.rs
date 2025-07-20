@@ -1,11 +1,3 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
-
-mod server;
-
-#[tokio::main]
-async fn main() {
-    // 启动网页服务器，端口12800
-    server::start_server(12800).await;
-}
