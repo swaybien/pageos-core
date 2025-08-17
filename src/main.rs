@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+use std::io;
 mod server;
 
 use clap::Parser;
@@ -14,7 +15,7 @@ use tracing::{error, info};
 struct Args {
     /// 服务监听端口
     #[arg(short, long, default_value_t = 12800)]
-    prot: u16,
+    port: u16,
 
     /// 启动子进程命令
     #[arg(short, long)]
@@ -26,7 +27,13 @@ async fn main() {
     // 初始化日志
     tracing_subscriber::fmt::init();
 
-    let args = Args::parse();
+    let args = match Args::try_parse() {
+        Ok(args) => args,
+        Err(e) => {
+            error!("参数解析失败: {}", e);
+            std::process::exit(1);
+        }
+    };
     info!("启动参数: {:?}", args);
 
     // 启动子进程（如果存在）
@@ -45,8 +52,8 @@ async fn main() {
     };
 
     // 启动服务器
-    info!("启动服务器，监听端口: {}", args.prot);
-    server::start_server(args.prot).await;
+    info!("启动服务器，监听端口: {}", args.port);
+    server::start_server(args.port).await;
 
     // 等待子进程退出（如果存在）
     if let Some(mut child) = child {

@@ -44,3 +44,27 @@
 
 1. 分析进程设计；
 2. 逐步在 `./index.html` 中实现进程功能；
+
+## 包管理器
+
+我们这一次只做以下的事：
+
+1. **一次性直接读取以下文件：**
+   `docs/design.md`、`src/main.rs`、`src/path.rs`、`src/config.rs`、`src/fsxg.rs`、`src/app.rs`、`src/repo.rs`、`src/index.rs`、`Cargo.toml`；
+2. 分析有什么广泛需要的功能，在通用模块中实现；
+3. 实现 `src/main.rs`；
+4. 运行 `cargo test` 检查潜在问题并修复。
+
+## 程序启动器
+
+（注：有些文件的父目录在符号链接中，所以在列表中不可见，请正常访问读取）
+
+pageos-app-launcher 是一个程序启动器。
+
+我们这一次只做以下的事：
+
+1. **一次性直接读取以下文件：**
+   `docs/draft.md`、`index.html`；
+2. 实现：
+
+   - JS 读取 `/index.json` 地址，解析本地应用程序列表；
